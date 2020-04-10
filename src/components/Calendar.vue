@@ -1,7 +1,10 @@
 <template>
   <div class="fish calendar" v-if="current.year">
     <div class="header">
-      <a :class="['prev', {'disabled': state === 'year'}]" @click.stop.prevent="pageHandler(-1)"><i class="fa fa-chevron-left"></i></a>
+      <a :class="['prev', {'disabled': state === 'year'}]" class="custom-next">
+        <i @click.stop.prevent="pageHandler(-12)" class="fa fa-angle-double-left"></i>
+        <i @click.stop.prevent="pageHandler(-1)" class="fa fa-angle-left"></i>
+      </a>
       <template v-for="(mode, index) in modes" v-if="modeIndex >= index">
         <a :class="mode" @click.stop="showItemsHandler(mode)" :key="index">
           {{ mode === 'month' ? current[mode] + 1 : current[mode] }}
@@ -9,7 +12,10 @@
         {{index < modeIndex ? (index <= 1 ? '-' : index === 2 ? ' ' : index <= 4 ? ':' : '') : ''}}
       </template>
       <!--<a class="reset" @click.stop="todayHandler" v-html="today" v-if="mode === 'day'"></a>-->
-      <a :class="['next', {'disabled': state === 'year'}]" @click.stop="pageHandler(1)"><i class="fa fa-chevron-right"></i></a>
+      <a :class="['next', {'disabled': state === 'year'}]" class="custom-next">
+        <i @click.stop="pageHandler(1)" class="fa fa-angle-right"></i>
+        <i @click.stop="pageHandler(12)" class="fa fa-angle-double-right"></i>
+      </a>
     </div>
 
     <table :class="['body', state]">
@@ -133,7 +139,7 @@
       },
       notInMinAndMax (item) {
         return (this.min !== '-1' && moment(this.min).isAfter(item, this.state)) ||
-        (this.max !== '-1' && moment(this.max).isBefore(item, this.state))
+                (this.max !== '-1' && moment(this.max).isBefore(item, this.state))
       },
       emitSelect () {
         if (this.state === this.mode) {
@@ -196,3 +202,19 @@
     return datess
   }
 </script>
+
+<style>
+  .fish.calendar > .header > a:hover {
+    color: #1a1a1a;
+  }
+
+  .custom-next > i {
+    min-width: 10px;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .custom-next > i:hover {
+    color: #0E76A8;
+  }
+</style>
